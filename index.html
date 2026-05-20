@@ -1,132 +1,187 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Trường Đại học Đại Nam</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      background: #fe4e03;
-    }
-    header, nav, section, footer {
-      border: 1px solid #ccc;
-      margin: 5px;
-      padding: 10px;
-      background: #fff;
-      text-align: center;
-    }
-    header {
-      background: #f7f6f6;
-      color: rgb(10, 10, 10);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 10px 20px;
-    }
-    header .actions {
-      display: flex;
-      gap: 10px;
-    }
-    header a {
-      color: white;
-      text-decoration: none;
-      font-weight: bold;
-    }
-    section.banner {
-      background: url('banner.jpg') center/cover no-repeat;
-      color: white;
-      padding: 50px 10px;
-    }
-    .banner h1 {
-      font-size: 32px;
-      margin: 10px 0 0;
-    }
-    .banner p {
-      font-size: 18px;
-    }
-    nav {
-      background: #e6eefc;
-    }
-    nav a {
-      margin: 0 15px;
-      text-decoration: none;
-      color: #0b63d6;
-      font-weight: bold;
-    }
-    main {
-      display: flex;
-      justify-content: space-around;
-      padding: 20px;
-    }
-    article {
-      background: #fff;
-      border: 1px solid #ddd;
-      padding: 15px;
-      width: 30%;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    }
-    footer {
-      background: white;
-      color:black;
-      font-size: 14px;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StockPro</title>
+
+    <style>
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family:Arial;
+        }
+
+        body{
+            background:#f4f4f4;
+            padding:30px;
+        }
+
+        .container{
+            max-width:900px;
+            margin:auto;
+            background:white;
+            padding:20px;
+            border-radius:10px;
+        }
+
+        h1{
+            text-align:center;
+            margin-bottom:20px;
+            color:#333;
+        }
+
+        .form{
+            display:flex;
+            gap:10px;
+            margin-bottom:20px;
+            flex-wrap:wrap;
+        }
+
+        input, select, button{
+            padding:10px;
+        }
+
+        button{
+            background:#007bff;
+            color:white;
+            border:none;
+            cursor:pointer;
+        }
+
+        button:hover{
+            background:#0056b3;
+        }
+
+        table{
+            width:100%;
+            border-collapse:collapse;
+            margin-top:20px;
+        }
+
+        table, th, td{
+            border:1px solid #ccc;
+        }
+
+        th, td{
+            padding:10px;
+            text-align:center;
+        }
+
+        .low-stock{
+            color:red;
+            font-weight:bold;
+        }
+    </style>
 </head>
 <body>
 
-  <!-- HEADER -->
-  <header>
-    <div><strong>Trường Đại học Đại Nam</strong></div>
-    <div class="actions">
-      <a href="#">Đăng ký</a> |
-      <a href="#">Đăng nhập</a> |
-      <a href="#">Ngôn ngữ</a>
+    <div class="container">
+
+        <h1>StockPro - Quản Lý Kho</h1>
+
+        <div class="form">
+            <input type="text" id="product" placeholder="Tên sản phẩm">
+
+            <input type="number" id="quantity" placeholder="Số lượng">
+
+            <select id="type">
+                <option value="import">Nhập kho</option>
+                <option value="export">Xuất kho</option>
+            </select>
+
+            <button onclick="addTransaction()">
+                Thêm
+            </button>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Sản phẩm</th>
+                    <th>Tồn kho</th>
+                    <th>Trạng thái</th>
+                </tr>
+            </thead>
+
+            <tbody id="inventoryTable">
+
+            </tbody>
+        </table>
+
     </div>
-  </header>
 
-  <!-- BANNER -->
-  <section class="banner">
-    
-    <h1>CHÀO MỪNG BẠN ĐẾN VỚI ĐẠI HỌC ĐẠI NAM</h1>
-    <p>Học để thay đổi</p>
-  </section>
+    <script>
 
-  <!-- NAVIGATION -->
-  <nav>
-    <a href="#gioithieu">Giới thiệu</a>
-    <a href="#nganhhoc">Ngành học</a>
-    <a href="#tintuc">Tin tức</a>
-    <a href="#lienhe">Liên hệ</a>
-  </nav>
+        let transactions = [];
 
-  <!-- MAIN CONTENT -->
-  <main>
-    <article id="gioithieu">
-      <h2>Giới thiệu</h2>
-      <p>Trường Đại học Đại Nam được thành lập nhằm đào tạo nguồn nhân lực chất lượng cao cho xã hội.</p>
-    </article>
-    <article id="nganhhoc">
-      <h2>Ngành học</h2>
-      <ul>
-        <li>Công nghệ Thông tin</li>
-        <li>Quản trị Kinh doanh</li>
-        <li>Kỹ thuật Công trình</li>
-      </ul>
-    </article>
-    <article id="tintuc">
-      <h2>Tin tức</h2>
-      <p>Cập nhật các hoạt động, sự kiện, và thông báo mới nhất của nhà trường.</p>
-    </article>
-  </main>
+        function addTransaction(){
 
-  <!-- FOOTER -->
-  <footer id="lienhe">
-    <p>Địa chỉ: Số 1, Phố Xốm, Hà Đông, Hà Nội | Hotline: 0999999999</p>
-    <p>Email: tuyensinh@dainam.edu.vn</p>
-    <p>© 2025 Trường Đại học Đại Nam - Bản quyền thuộc về nhà trường</p>
-  </footer>
+            const product = document.getElementById("product").value;
+            const quantity = Number(document.getElementById("quantity").value);
+            const type = document.getElementById("type").value;
+
+            if(product === "" || quantity <= 0){
+                alert("Vui lòng nhập dữ liệu hợp lệ");
+                return;
+            }
+
+            transactions.push({
+                product,
+                quantity,
+                type
+            });
+
+            renderInventory();
+
+            document.getElementById("product").value = "";
+            document.getElementById("quantity").value = "";
+        }
+
+        function renderInventory(){
+
+            const inventory = transactions.reduce((result, item) => {
+
+                if(!result[item.product]){
+                    result[item.product] = 0;
+                }
+
+                if(item.type === "import"){
+                    result[item.product] += item.quantity;
+                }else{
+                    result[item.product] -= item.quantity;
+                }
+
+                return result;
+
+            }, {});
+
+            const table = document.getElementById("inventoryTable");
+
+            table.innerHTML = "";
+
+            for(let product in inventory){
+
+                let status = "Còn hàng";
+
+                if(inventory[product] <= 5){
+                    status = "Sắp hết hàng";
+                }
+
+                table.innerHTML += `
+                    <tr>
+                        <td>${product}</td>
+                        <td>${inventory[product]}</td>
+                        <td class="${inventory[product] <= 5 ? 'low-stock' : ''}">
+                            ${status}
+                        </td>
+                    </tr>
+                `;
+            }
+        }
+
+    </script>
 
 </body>
 </html>
