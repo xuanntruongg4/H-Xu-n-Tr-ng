@@ -6,6 +6,7 @@
     <title>StockPro</title>
 
     <style>
+
         *{
             margin:0;
             padding:0;
@@ -24,6 +25,7 @@
             background:white;
             padding:20px;
             border-radius:10px;
+            box-shadow:0 0 10px rgba(0,0,0,0.1);
         }
 
         h1{
@@ -35,12 +37,16 @@
         .form{
             display:flex;
             gap:10px;
-            margin-bottom:20px;
             flex-wrap:wrap;
+            margin-bottom:20px;
         }
 
-        input, select, button{
+        select,
+        input,
+        button{
             padding:10px;
+            border:1px solid #ccc;
+            border-radius:5px;
         }
 
         button{
@@ -54,26 +60,42 @@
             background:#0056b3;
         }
 
+        #quantityDisplay{
+            margin-top:10px;
+            font-weight:bold;
+            color:#007bff;
+        }
+
         table{
             width:100%;
             border-collapse:collapse;
             margin-top:20px;
         }
 
-        table, th, td{
+        table,
+        th,
+        td{
             border:1px solid #ccc;
         }
 
-        th, td{
-            padding:10px;
+        th,
+        td{
+            padding:12px;
             text-align:center;
+        }
+
+        th{
+            background:#007bff;
+            color:white;
         }
 
         .low-stock{
             color:red;
             font-weight:bold;
         }
+
     </style>
+
 </head>
 <body>
 
@@ -82,115 +104,172 @@
         <h1>StockPro - Quản Lý Kho</h1>
 
         <div class="form">
-<select id="product">
 
-    <option value="Giấy">Giấy</option>
+            <select id="product" onchange="showQuantity()">
 
-    <option value="Bút">Bút</option>
+                <option value="Giấy">Giấy</option>
 
-    <option value="Thước kẻ">Thước kẻ</option>
+                <option value="Bút">Bút</option>
 
-    <option value="Tẩy">Tẩy</option>
+                <option value="Thước kẻ">Thước kẻ</option>
 
-    <option value="Compa">Compa</option>
+                <option value="Tẩy">Tẩy</option>
 
-</select>
-            <input type="number" id="quantity" placeholder="Số lượng">
+                <option value="Compa">Compa</option>
+
+            </select>
+
+            <input
+                type="number"
+                id="quantity"
+                placeholder="Nhập số lượng"
+            >
 
             <select id="type">
-                <option value="import">Nhập kho</option>
-                <option value="export">Xuất kho</option>
+
+                <option value="import">
+                    Nhập kho
+                </option>
+
+                <option value="export">
+                    Xuất kho
+                </option>
+
             </select>
 
             <button onclick="addTransaction()">
                 Thêm
             </button>
+
         </div>
 
+        <p id="quantityDisplay">
+            Số lượng hiện có: 120
+        </p>
+
         <table>
+
             <thead>
+
                 <tr>
                     <th>Sản phẩm</th>
-                    <th>Tồn kho</th>
+                    <th>Số lượng</th>
                     <th>Trạng thái</th>
                 </tr>
+
             </thead>
 
             <tbody id="inventoryTable">
 
             </tbody>
+
         </table>
 
     </div>
 
     <script>
 
-        let transactions = [];
+        const products = {
 
-        function addTransaction(){
+            "Giấy": 120,
+            "Bút": 75,
+            "Thước kẻ": 40,
+            "Tẩy": 25,
+            "Compa": 15
 
-            const product = document.getElementById("product").value;
-            const quantity = Number(document.getElementById("quantity").value);
-            const type = document.getElementById("type").value;
+        };
 
-            if(product === "" || quantity <= 0){
-                alert("Vui lòng nhập dữ liệu hợp lệ");
-                return;
-            }
+        function showQuantity(){
 
-            transactions.push({
-                product,
-                quantity,
-                type
-            });
+            const product =
+                document.getElementById("product").value;
 
-            renderInventory();
+            document.getElementById("quantityDisplay").innerHTML =
+                "Số lượng hiện có: " + products[product];
 
-            document.getElementById("product").value = "";
-            document.getElementById("quantity").value = "";
         }
 
-        function renderInventory(){
+        function renderTable(){
 
-            const inventory = transactions.reduce((result, item) => {
-
-                if(!result[item.product]){
-                    result[item.product] = 0;
-                }
-
-                if(item.type === "import"){
-                    result[item.product] += item.quantity;
-                }else{
-                    result[item.product] -= item.quantity;
-                }
-
-                return result;
-
-            }, {});
-
-            const table = document.getElementById("inventoryTable");
+            const table =
+                document.getElementById("inventoryTable");
 
             table.innerHTML = "";
 
-            for(let product in inventory){
+            for(let product in products){
 
                 let status = "Còn hàng";
 
-                if(inventory[product] <= 5){
+                if(products[product] <= 10){
                     status = "Sắp hết hàng";
                 }
 
                 table.innerHTML += `
+
                     <tr>
+
                         <td>${product}</td>
-                        <td>${inventory[product]}</td>
-                        <td class="${inventory[product] <= 5 ? 'low-stock' : ''}">
+
+                        <td>${products[product]}</td>
+
+                        <td class="
+                            ${products[product] <= 10
+                                ? 'low-stock'
+                                : ''
+                            }
+                        ">
                             ${status}
                         </td>
+
                     </tr>
+
                 `;
             }
         }
+
+        function addTransaction(){
+
+            const product =
+                document.getElementById("product").value;
+
+            const quantity =
+                Number(document.getElementById("quantity").value);
+
+            const type =
+                document.getElementById("type").value;
+
+            if(quantity <= 0){
+
+                alert("Vui lòng nhập số lượng hợp lệ");
+
+                return;
+            }
+
+            if(type === "import"){
+
+                products[product] += quantity;
+
+            }else{
+
+                if(quantity > products[product]){
+
+                    alert("Không đủ hàng trong kho");
+
+                    return;
+                }
+
+                products[product] -= quantity;
+            }
+
+            showQuantity();
+
+            renderTable();
+
+            document.getElementById("quantity").value = "";
+
+        }
+
+        renderTable();
 
     </script>
 
