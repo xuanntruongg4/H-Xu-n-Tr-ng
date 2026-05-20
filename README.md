@@ -3,70 +3,184 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bài tập jQuery Ẩn/Hiện</title>
+    <title>StockPro</title>
 
     <style>
-        body{
-            font-family: Arial, sans-serif;
-            margin: 40px;
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family:Arial;
         }
 
-        h2{
-            color: #333;
+        body{
+            background:#f4f4f4;
+            padding:30px;
+        }
+
+        .container{
+            max-width:900px;
+            margin:auto;
+            background:white;
+            padding:20px;
+            border-radius:10px;
+        }
+
+        h1{
+            text-align:center;
+            margin-bottom:20px;
+            color:#333;
+        }
+
+        .form{
+            display:flex;
+            gap:10px;
+            margin-bottom:20px;
+            flex-wrap:wrap;
+        }
+
+        input, select, button{
+            padding:10px;
         }
 
         button{
-            padding: 10px 20px;
-            margin-right: 10px;
-            border: 1px solid #999;
-            background: white;
-            cursor: pointer;
+            background:#007bff;
+            color:white;
+            border:none;
+            cursor:pointer;
         }
 
-        #box{
-            width: 320px;
-            padding: 20px;
-            margin-top: 20px;
-            border: 2px solid #4a90e2;
-            background: #eaf4ff;
+        button:hover{
+            background:#0056b3;
         }
 
-        #box h3{
-            margin-top: 0;
+        table{
+            width:100%;
+            border-collapse:collapse;
+            margin-top:20px;
+        }
+
+        table, th, td{
+            border:1px solid #ccc;
+        }
+
+        th, td{
+            padding:10px;
+            text-align:center;
+        }
+
+        .low-stock{
+            color:red;
+            font-weight:bold;
         }
     </style>
 </head>
 <body>
 
-    <h2>Bài tập jQuery Ẩn / Hiện nội dung</h2>
+    <div class="container">
 
-    <button onclick="anNoiDung()">Ẩn nội dung</button>
-    <button onclick="hienNoiDung()">Hiện nội dung</button>
-    <button onclick="anHien()">Ẩn / Hiện</button>
+        <h1>StockPro - Quản Lý Kho</h1>
 
-    <div id="box">
-        <h3>Thông báo</h3>
-        <p>Đây là nội dung được điều khiển bằng jQuery.</p>
+        <div class="form">
+            <input type="text" id="product" placeholder="Tên sản phẩm">
+
+            <input type="number" id="quantity" placeholder="Số lượng">
+
+            <select id="type">
+                <option value="import">Nhập kho</option>
+                <option value="export">Xuất kho</option>
+            </select>
+
+            <button onclick="addTransaction()">
+                Thêm
+            </button>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Sản phẩm</th>
+                    <th>Tồn kho</th>
+                    <th>Trạng thái</th>
+                </tr>
+            </thead>
+
+            <tbody id="inventoryTable">
+
+            </tbody>
+        </table>
+
     </div>
 
     <script>
-        function anNoiDung(){
-            document.getElementById("box").style.display = "none";
+
+        let transactions = [];
+
+        function addTransaction(){
+
+            const product = document.getElementById("product").value;
+            const quantity = Number(document.getElementById("quantity").value);
+            const type = document.getElementById("type").value;
+
+            if(product === "" || quantity <= 0){
+                alert("Vui lòng nhập dữ liệu hợp lệ");
+                return;
+            }
+
+            transactions.push({
+                product,
+                quantity,
+                type
+            });
+
+            renderInventory();
+
+            document.getElementById("product").value = "";
+            document.getElementById("quantity").value = "";
         }
 
-        function hienNoiDung(){
-            document.getElementById("box").style.display = "block";
-        }
+        function renderInventory(){
 
-        function anHien(){
-            let box = document.getElementById("box");
+            const inventory = transactions.reduce((result, item) => {
 
-            if(box.style.display === "none"){
-                box.style.display = "block";
-            } else {
-                box.style.display = "none";
+                if(!result[item.product]){
+                    result[item.product] = 0;
+                }
+
+                if(item.type === "import"){
+                    result[item.product] += item.quantity;
+                }else{
+                    result[item.product] -= item.quantity;
+                }
+
+                return result;
+
+            }, {});
+
+            const table = document.getElementById("inventoryTable");
+
+            table.innerHTML = "";
+
+            for(let product in inventory){
+
+                let status = "Còn hàng";
+
+                if(inventory[product] <= 5){
+                    status = "Sắp hết hàng";
+                }
+
+                table.innerHTML += `
+                    <tr>
+                        <td>${product}</td>
+                        <td>${inventory[product]}</td>
+                        <td class="${inventory[product] <= 5 ? 'low-stock' : ''}">
+                            ${status}
+                        </td>
+                    </tr>
+                `;
             }
         }
+
     </script>
 
 </body>
