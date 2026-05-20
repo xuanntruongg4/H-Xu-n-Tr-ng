@@ -1,232 +1,502 @@
 <!DOCTYPE html>
 <html lang="vi">
-
 <head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>StockPro - Warehouse Management</title>
 
-    <meta charset="UTF-8">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
 
-    <title>Quản Lý Kho Hàng</title>
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family: 'Poppins', sans-serif;
+    }
 
-    <style>
+    body{
+      background:#f1f5f9;
+      min-height:100vh;
+      padding:30px;
+      color:#1e293b;
+    }
 
-        *{
-            margin:0;
-            padding:0;
-            box-sizing:border-box;
-            font-family:Arial;
-        }
+    .container{
+      max-width:1200px;
+      margin:auto;
+    }
 
-        body{
-            background:#f4f4f4;
-            padding:30px;
-        }
+    .header{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      margin-bottom:25px;
+    }
 
-        .container{
-            width:800px;
-            margin:auto;
-            background:white;
-            padding:20px;
-            border-radius:10px;
-            box-shadow:0 0 10px rgba(0,0,0,0.1);
-        }
+    .header h1{
+      font-size:32px;
+      font-weight:700;
+    }
 
-        h1{
-            text-align:center;
-            margin-bottom:20px;
-            color:#333;
-        }
+    .header p{
+      color:#64748b;
+      margin-top:5px;
+    }
 
-        .box{
-            display:flex;
-            gap:20px;
-        }
+    .top-cards{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+      gap:20px;
+      margin-bottom:25px;
+    }
 
-        .menu{
-            width:35%;
-        }
+    .card{
+      background:white;
+      border-radius:18px;
+      padding:22px;
+      box-shadow:0 5px 15px rgba(0,0,0,0.05);
+    }
 
-        .menu h3{
-            margin-bottom:15px;
-        }
+    .card h3{
+      font-size:15px;
+      color:#64748b;
+      margin-bottom:10px;
+      font-weight:500;
+    }
 
-        .menu ul{
-            list-style:none;
-        }
+    .card h2{
+      font-size:30px;
+      font-weight:700;
+    }
 
-        .menu li{
-            background:#007bff;
-            color:white;
-            padding:12px;
-            margin-bottom:10px;
-            border-radius:5px;
-            cursor:pointer;
-            transition:0.3s;
-        }
+    .main{
+      display:grid;
+      grid-template-columns:350px 1fr;
+      gap:20px;
+    }
 
-        .menu li:hover{
-            background:#0056b3;
-        }
+    .form-box,
+    .table-box{
+      background:white;
+      border-radius:20px;
+      padding:25px;
+      box-shadow:0 5px 15px rgba(0,0,0,0.05);
+    }
 
-        .info{
-            width:65%;
-            background:#f0f8ff;
-            padding:20px;
-            border-radius:10px;
-        }
+    .form-box h2,
+    .table-box h2{
+      margin-bottom:20px;
+      font-size:22px;
+    }
 
-        .info h3{
-            margin-bottom:15px;
-            color:#333;
-        }
+    .form-group{
+      margin-bottom:18px;
+    }
 
-        .info p{
-            margin-bottom:12px;
-            font-size:18px;
-        }
+    .form-group label{
+      display:block;
+      margin-bottom:8px;
+      font-weight:500;
+    }
 
-    </style>
+    .form-group input,
+    .form-group select{
+      width:100%;
+      padding:12px;
+      border:1px solid #dbeafe;
+      border-radius:10px;
+      font-size:15px;
+      outline:none;
+      transition:0.3s;
+    }
 
+    .form-group input:focus,
+    .form-group select:focus{
+      border-color:#2563eb;
+    }
+
+    .btn{
+      width:100%;
+      padding:14px;
+      border:none;
+      border-radius:12px;
+      background:#2563eb;
+      color:white;
+      font-size:16px;
+      font-weight:600;
+      cursor:pointer;
+      transition:0.3s;
+    }
+
+    .btn:hover{
+      background:#1d4ed8;
+    }
+
+    table{
+      width:100%;
+      border-collapse:collapse;
+    }
+
+    table thead{
+      background:#eff6ff;
+    }
+
+    table th{
+      padding:15px;
+      text-align:left;
+      color:#1e3a8a;
+      font-size:14px;
+    }
+
+    table td{
+      padding:15px;
+      border-bottom:1px solid #e2e8f0;
+      font-size:14px;
+    }
+
+    .status{
+      padding:6px 12px;
+      border-radius:20px;
+      font-size:13px;
+      font-weight:600;
+      display:inline-block;
+    }
+
+    .available{
+      background:#dcfce7;
+      color:#166534;
+    }
+
+    .low{
+      background:#fee2e2;
+      color:#991b1b;
+    }
+
+    .actions button{
+      border:none;
+      padding:8px 12px;
+      border-radius:8px;
+      cursor:pointer;
+      font-size:13px;
+      margin-right:5px;
+    }
+
+    .delete{
+      background:#ef4444;
+      color:white;
+    }
+
+    .edit{
+      background:#f59e0b;
+      color:white;
+    }
+
+    .empty{
+      text-align:center;
+      padding:40px;
+      color:#94a3b8;
+    }
+
+    @media(max-width:900px){
+
+      .main{
+        grid-template-columns:1fr;
+      }
+
+    }
+
+  </style>
 </head>
-
 <body>
 
-    <div class="container">
+  <div class="container">
 
-        <h1>Quản Lý Kho Hàng</h1>
+    <div class="header">
+      <div>
+        <h1>📦 StockPro</h1>
+        <p>Hệ thống quản lý kho hàng thông minh</p>
+      </div>
+    </div>
 
-        <div class="box">
+    <!-- Dashboard -->
+    <div class="top-cards">
 
-            <div class="menu">
+      <div class="card">
+        <h3>Tổng sản phẩm</h3>
+        <h2 id="totalProducts">0</h2>
+      </div>
 
-                <h3>Thư mục sản phẩm</h3>
+      <div class="card">
+        <h3>Tổng tồn kho</h3>
+        <h2 id="totalStock">0</h2>
+      </div>
 
-                <ul>
-
-                    <li onclick="showInfo('Bút')">
-                        Bút
-                    </li>
-
-                    <li onclick="showInfo('Thước kẻ')">
-                        Thước kẻ
-                    </li>
-
-                    <li onclick="showInfo('Giấy')">
-                        Giấy
-                    </li>
-
-                    <li onclick="showInfo('Compa')">
-                        Compa
-                    </li>
-
-                    <li onclick="showInfo('Tẩy')">
-                        Tẩy
-                    </li>
-
-                    <li onclick="showInfo('Máy tính')">
-                        Máy tính
-                    </li>
-
-                </ul>
-
-            </div>
-
-            <div class="info" id="productInfo">
-
-                <h3>Thông tin sản phẩm</h3>
-
-                <p>Chọn sản phẩm để xem thông tin</p>
-
-            </div>
-
-        </div>
+      <div class="card">
+        <h3>Sắp hết hàng</h3>
+        <h2 id="lowStock">0</h2>
+      </div>
 
     </div>
 
-    <script>
+    <div class="main">
 
-        const products = {
+      <!-- FORM -->
+      <div class="form-box">
 
-            "Bút": {
-                quantity: 120,
-                importDate: "12/05/2026",
-                price: 5000
-            },
+        <h2>Nhập / Xuất kho</h2>
 
-            "Thước kẻ": {
-                quantity: 50,
-                importDate: "15/05/2026",
-                price: 10000
-            },
+        <div class="form-group">
+          <label>Tên sản phẩm</label>
+          <input type="text" id="name" placeholder="VD: Bàn phím cơ">
+        </div>
 
-            "Giấy": {
-                quantity: 300,
-                importDate: "10/05/2026",
-                price: 2000
-            },
+        <div class="form-group">
+          <label>Số lượng</label>
+          <input type="number" id="quantity" placeholder="VD: 10">
+        </div>
 
-            "Compa": {
-                quantity: 25,
-                importDate: "08/05/2026",
-                price: 20000
-            },
+        <div class="form-group">
+          <label>Loại giao dịch</label>
 
-            "Tẩy": {
-                quantity: 70,
-                importDate: "18/05/2026",
-                price: 3000
-            },
+          <select id="type">
+            <option value="import">Nhập hàng</option>
+            <option value="export">Xuất hàng</option>
+          </select>
 
-            "Máy tính": {
-                quantity: 15,
-                importDate: "20/05/2026",
-                price: 150000
-            }
+        </div>
 
-        };
+        <button class="btn" onclick="handleStock()">
+          Xác nhận giao dịch
+        </button>
 
-        function showInfo(product){
+      </div>
 
-            const info = products[product];
+      <!-- TABLE -->
+      <div class="table-box">
 
-            const totalMoney =
-                info.quantity * info.price;
+        <h2>Danh sách kho</h2>
 
-            document.getElementById("productInfo").innerHTML = `
+        <table>
 
-                <h3>Thông tin sản phẩm</h3>
+          <thead>
+            <tr>
+              <th>Sản phẩm</th>
+              <th>Số lượng</th>
+              <th>Trạng thái</th>
+              <th>Hành động</th>
+            </tr>
+          </thead>
 
-                <p>
-                    <b>Tên sản phẩm:</b>
-                    ${product}
-                </p>
+          <tbody id="productList">
 
-                <p>
-                    <b>Số lượng:</b>
-                    ${info.quantity}
-                </p>
+            <tr>
+              <td colspan="4" class="empty">
+                Chưa có dữ liệu
+              </td>
+            </tr>
 
-                <p>
-                    <b>Ngày nhập:</b>
-                    ${info.importDate}
-                </p>
+          </tbody>
 
-                <p>
-                    <b>Đơn giá:</b>
-                    ${info.price.toLocaleString()} VNĐ
-                </p>
+        </table>
 
-                <p>
-                    <b>Tổng tiền:</b>
-                    ${totalMoney.toLocaleString()} VNĐ
-                </p>
+      </div>
 
-            `;
+    </div>
+
+  </div>
+
+  <script>
+
+    let products = [];
+
+    function handleStock(){
+
+      const name = document.getElementById("name").value.trim();
+      const quantity = Number(document.getElementById("quantity").value);
+      const type = document.getElementById("type").value;
+
+      if(name === "" || quantity <= 0){
+
+        alert("Vui lòng nhập đầy đủ thông tin!");
+        return;
+
+      }
+
+      let product = products.find(p => p.name.toLowerCase() === name.toLowerCase());
+
+      if(product){
+
+        if(type === "import"){
+
+          product.quantity += quantity;
+
+        }else{
+
+          if(product.quantity < quantity){
+
+            alert("Không đủ hàng để xuất!");
+            return;
+
+          }
+
+          product.quantity -= quantity;
+
         }
 
-    </script>
+      }else{
+
+        if(type === "export"){
+
+          alert("Sản phẩm chưa tồn tại!");
+          return;
+
+        }
+
+        products.push({
+          id: Date.now(),
+          name,
+          quantity
+        });
+
+      }
+
+      renderProducts();
+      resetForm();
+
+    }
+
+    function renderProducts(){
+
+      const productList = document.getElementById("productList");
+
+      if(products.length === 0){
+
+        productList.innerHTML = `
+          <tr>
+            <td colspan="4" class="empty">
+              Chưa có dữ liệu
+            </td>
+          </tr>
+        `;
+
+      }else{
+
+        productList.innerHTML = "";
+
+        products.forEach(product => {
+
+          const isLow = product.quantity < 5;
+
+          productList.innerHTML += `
+
+            <tr>
+
+              <td>${product.name}</td>
+
+              <td>${product.quantity}</td>
+
+              <td>
+                <span class="status ${isLow ? 'low' : 'available'}">
+                  ${isLow ? 'Sắp hết hàng' : 'Còn hàng'}
+                </span>
+              </td>
+
+              <td class="actions">
+
+                <button class="edit"
+                  onclick="editProduct(${product.id})">
+                  Sửa
+                </button>
+
+                <button class="delete"
+                  onclick="deleteProduct(${product.id})">
+                  Xóa
+                </button>
+
+              </td>
+
+            </tr>
+
+          `;
+
+        });
+
+      }
+
+      updateDashboard();
+
+    }
+
+    function updateDashboard(){
+
+      document.getElementById("totalProducts").innerText =
+        products.length;
+
+      // reduce()
+      const totalStock = products.reduce((sum, product) => {
+
+        return sum + product.quantity;
+
+      },0);
+
+      document.getElementById("totalStock").innerText =
+        totalStock;
+
+      const lowStock = products.filter(product =>
+        product.quantity < 5
+      ).length;
+
+      document.getElementById("lowStock").innerText =
+        lowStock;
+
+    }
+
+    function deleteProduct(id){
+
+      if(confirm("Bạn có chắc muốn xóa sản phẩm này?")){
+
+        products = products.filter(product =>
+          product.id !== id
+        );
+
+        renderProducts();
+
+      }
+
+    }
+
+    function editProduct(id){
+
+      const product = products.find(product =>
+        product.id === id
+      );
+
+      const newQuantity = prompt(
+        "Nhập số lượng mới:",
+        product.quantity
+      );
+
+      if(newQuantity !== null){
+
+        product.quantity = Number(newQuantity);
+
+        renderProducts();
+
+      }
+
+    }
+
+    function resetForm(){
+
+      document.getElementById("name").value = "";
+      document.getElementById("quantity").value = "";
+
+    }
+
+  </script>
 
 </body>
-
 </html>
