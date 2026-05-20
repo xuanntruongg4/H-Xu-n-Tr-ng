@@ -15,3 +15,62 @@
 <div id="productInfo">
 
 </div>
+const products = {
+
+    "Giấy": {
+        quantity: 120,
+        importDate: "15/05/2026"
+    },
+
+    "Bút": {
+        quantity: 75,
+        importDate: "10/05/2026"
+    },
+
+    "Thước kẻ": {
+        quantity: 40,
+        importDate: "08/05/2026"
+    },
+
+    "Tẩy": {
+        quantity: 25,
+        importDate: "12/05/2026"
+    },
+
+    "Compa": {
+        quantity: 15,
+        importDate: "18/05/2026"
+    }
+
+};
+
+function showInfo(){
+
+    const product =
+        document.getElementById("product").value;
+
+    const info = products[product];
+
+    document.getElementById("productInfo").innerHTML = `
+
+        <h3>Thông tin sản phẩm</h3>
+
+        <p>
+            Tên sản phẩm:
+            <b>${product}</b>
+        </p>
+
+        <p>
+            Số lượng:
+            <b>${info.quantity}</b>
+        </p>
+
+        <p>
+            Ngày nhập:
+            <b>${info.importDate}</b>
+        </p>
+
+    `;
+}
+
+showInfo();
