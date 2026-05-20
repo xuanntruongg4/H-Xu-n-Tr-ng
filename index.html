@@ -1,76 +1,150 @@
-<select id="product" onchange="showInfo()">
+<!DOCTYPE html>
+<html lang="vi">
 
-    <option value="Giấy">Giấy</option>
+<head>
 
-    <option value="Bút">Bút</option>
+    <meta charset="UTF-8">
 
-    <option value="Thước kẻ">Thước kẻ</option>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <option value="Tẩy">Tẩy</option>
+    <title>Quản Lý Kho</title>
 
-    <option value="Compa">Compa</option>
+    <style>
 
-</select>
+        body{
+            font-family:Arial;
+            background:#f4f4f4;
+            padding:30px;
+        }
 
-<div id="productInfo">
+        .container{
+            width:500px;
+            margin:auto;
+            background:white;
+            padding:20px;
+            border-radius:10px;
+        }
 
-</div>
-const products = {
+        select{
+            padding:10px;
+            width:100%;
+            margin-bottom:20px;
+        }
 
-    "Giấy": {
-        quantity: 120,
-        importDate: "15/05/2026"
-    },
+        #productInfo{
+            background:#f0f8ff;
+            padding:15px;
+            border-radius:10px;
+        }
 
-    "Bút": {
-        quantity: 75,
-        importDate: "10/05/2026"
-    },
+        h3{
+            margin-bottom:10px;
+        }
 
-    "Thước kẻ": {
-        quantity: 40,
-        importDate: "08/05/2026"
-    },
+    </style>
 
-    "Tẩy": {
-        quantity: 25,
-        importDate: "12/05/2026"
-    },
+</head>
 
-    "Compa": {
-        quantity: 15,
-        importDate: "18/05/2026"
-    }
+<body>
 
-};
+    <div class="container">
 
-function showInfo(){
+        <h2>Danh Sách Sản Phẩm</h2>
 
-    const product =
-        document.getElementById("product").value;
+        <select id="product" onchange="showInfo()">
 
-    const info = products[product];
+            <option value="Giấy">
+                Giấy
+            </option>
 
-    document.getElementById("productInfo").innerHTML = `
+            <option value="Bút">
+                Bút
+            </option>
 
-        <h3>Thông tin sản phẩm</h3>
+            <option value="Thước kẻ">
+                Thước kẻ
+            </option>
 
-        <p>
-            Tên sản phẩm:
-            <b>${product}</b>
-        </p>
+            <option value="Tẩy">
+                Tẩy
+            </option>
 
-        <p>
-            Số lượng:
-            <b>${info.quantity}</b>
-        </p>
+            <option value="Compa">
+                Compa
+            </option>
 
-        <p>
-            Ngày nhập:
-            <b>${info.importDate}</b>
-        </p>
+        </select>
 
-    `;
-}
+        <div id="productInfo">
 
-showInfo();
+        </div>
+
+    </div>
+
+    <script>
+
+        const products = {
+
+            "Giấy": {
+                quantity: 120,
+                importDate: "15/05/2026"
+            },
+
+            "Bút": {
+                quantity: 75,
+                importDate: "10/05/2026"
+            },
+
+            "Thước kẻ": {
+                quantity: 40,
+                importDate: "08/05/2026"
+            },
+
+            "Tẩy": {
+                quantity: 25,
+                importDate: "12/05/2026"
+            },
+
+            "Compa": {
+                quantity: 15,
+                importDate: "18/05/2026"
+            }
+
+        };
+
+        function showInfo(){
+
+            const product =
+                document.getElementById("product").value;
+
+            const info = products[product];
+
+            document.getElementById("productInfo").innerHTML = `
+
+                <h3>Thông tin sản phẩm</h3>
+
+                <p>
+                    <b>Tên sản phẩm:</b>
+                    ${product}
+                </p>
+
+                <p>
+                    <b>Số lượng:</b>
+                    ${info.quantity}
+                </p>
+
+                <p>
+                    <b>Ngày nhập:</b>
+                    ${info.importDate}
+                </p>
+
+            `;
+        }
+
+        showInfo();
+
+    </script>
+
+</body>
+
+</html>
