@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>StockPro Professional</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -192,12 +193,16 @@
       background:#ef4444;
     }
 
-    .bottom{
-      margin-top:20px;
+    .search-box{
+      margin-bottom:20px;
     }
 
-    .history-box{
-      margin-top:20px;
+    .search-box input{
+      width:100%;
+      padding:12px;
+      border:1px solid #cbd5e1;
+      border-radius:10px;
+      outline:none;
     }
 
     @media(max-width:1000px){
@@ -209,16 +214,19 @@
     }
 
   </style>
+
 </head>
 <body>
 
   <div class="container">
 
     <div class="header">
+
       <div>
         <h1>📦 StockPro Professional</h1>
         <p>Hệ thống quản lý kho hàng doanh nghiệp</p>
       </div>
+
     </div>
 
     <!-- Dashboard -->
@@ -253,11 +261,19 @@
 
       <div class="form-box">
 
-        <h2>Quản lý nhập / xuất</h2>
+        <h2>Nhập / Xuất kho</h2>
 
         <div class="form-group">
-          <label>Tên sản phẩm</label>
-          <input type="text" id="name" placeholder="VD: Laptop Dell">
+          <label>Sản phẩm</label>
+
+          <input
+            list="productSuggestions"
+            type="text"
+            id="name"
+            placeholder="Nhập tên sản phẩm">
+
+          <datalist id="productSuggestions"></datalist>
+
         </div>
 
         <div class="form-group">
@@ -297,6 +313,14 @@
 
         <h2>Danh sách kho</h2>
 
+        <div class="search-box">
+          <input
+            type="text"
+            id="search"
+            placeholder="🔍 Tìm kiếm sản phẩm..."
+            onkeyup="searchProduct()">
+        </div>
+
         <table>
 
           <thead>
@@ -309,9 +333,7 @@
             </tr>
           </thead>
 
-          <tbody id="productList">
-
-          </tbody>
+          <tbody id="productList"></tbody>
 
         </table>
 
@@ -321,7 +343,7 @@
 
     <!-- HISTORY -->
 
-    <div class="history-box">
+    <div class="history-box" style="margin-top:20px;">
 
       <h2>Lịch sử nhập / xuất kho</h2>
 
@@ -338,9 +360,7 @@
           </tr>
         </thead>
 
-        <tbody id="historyList">
-
-        </tbody>
+        <tbody id="historyList"></tbody>
 
       </table>
 
@@ -355,13 +375,25 @@
 
     function handleTransaction(){
 
-      const name = document.getElementById("name").value.trim();
-      const quantity = Number(document.getElementById("quantity").value);
-      const type = document.getElementById("type").value;
-      const date = document.getElementById("date").value;
-      const staff = document.getElementById("staff").value;
+      const name =
+        document.getElementById("name").value.trim();
 
-      if(name === "" || quantity <= 0 || date === "" || staff === ""){
+      const quantity =
+        Number(document.getElementById("quantity").value);
+
+      const type =
+        document.getElementById("type").value;
+
+      const date =
+        document.getElementById("date").value;
+
+      const staff =
+        document.getElementById("staff").value;
+
+      if(name === "" ||
+        quantity <= 0 ||
+        date === "" ||
+        staff === ""){
 
         alert("Vui lòng nhập đầy đủ thông tin!");
         return;
@@ -423,13 +455,15 @@
       renderProducts();
       renderHistory();
       updateDashboard();
+      updateSuggestions();
       resetForm();
 
     }
 
     function renderProducts(){
 
-      const productList = document.getElementById("productList");
+      const productList =
+        document.getElementById("productList");
 
       productList.innerHTML = "";
 
@@ -454,10 +488,15 @@
             </td>
 
             <td class="actions">
-              <button class="delete"
+
+              <button
+                class="delete"
                 onclick="deleteProduct(${product.id})">
+
                 Xóa
+
               </button>
+
             </td>
 
           </tr>
@@ -485,8 +524,12 @@
 
             <td>${transaction.name}</td>
 
-            <td class="${transaction.type === 'Nhập' ? 'import':'export'}">
+            <td class="${transaction.type === 'Nhập'
+              ? 'import'
+              : 'export'}">
+
               ${transaction.type}
+
             </td>
 
             <td>${transaction.quantity}</td>
@@ -507,6 +550,8 @@
 
       document.getElementById("totalProducts").innerText =
         products.length;
+
+      // reduce()
 
       const totalStock = products.reduce((sum, product) => {
 
@@ -529,6 +574,52 @@
 
     }
 
+    function updateSuggestions(){
+
+      const list =
+        document.getElementById("productSuggestions");
+
+      list.innerHTML = "";
+
+      products.forEach(product => {
+
+        list.innerHTML += `
+          <option value="${product.name}">
+        `;
+
+      });
+
+    }
+
+    function searchProduct(){
+
+      const keyword =
+        document.getElementById("search")
+        .value
+        .toLowerCase();
+
+      const rows =
+        document.querySelectorAll("#productList tr");
+
+      rows.forEach(row => {
+
+        const productName =
+          row.children[0].innerText.toLowerCase();
+
+        if(productName.includes(keyword)){
+
+          row.style.display = "";
+
+        }else{
+
+          row.style.display = "none";
+
+        }
+
+      });
+
+    }
+
     function deleteProduct(id){
 
       if(confirm("Bạn chắc chắn muốn xóa?")){
@@ -539,6 +630,7 @@
 
         renderProducts();
         updateDashboard();
+        updateSuggestions();
 
       }
 
