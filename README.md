@@ -114,8 +114,57 @@
 
     <script>
 
-        let transactions = [];
+let transactions = [
 
+    {
+        product: "Giấy",
+        quantity: 100,
+        type: "import"
+    },
+
+    {
+        product: "Giấy",
+        quantity: 20,
+        type: "export"
+    },
+
+    {
+        product: "Bút",
+        quantity: 50,
+        type: "import"
+    },
+
+    {
+        product: "Bút",
+        quantity: 10,
+        type: "export"
+    },
+
+    {
+        product: "Tẩy",
+        quantity: 30,
+        type: "import"
+    },
+
+    {
+        product: "Tẩy",
+        quantity: 5,
+        type: "export"
+    },
+
+    {
+        product: "Thước kẻ",
+        quantity: 25,
+        type: "import"
+    },
+
+    {
+        product: "Thước kẻ",
+        quantity: 3,
+        type: "export"
+    }
+
+];
         function addTransaction(){
 
             const product = document.getElementById("product").value;
