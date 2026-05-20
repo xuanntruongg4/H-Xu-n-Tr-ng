@@ -1,11 +1,16 @@
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
+
     <meta charset="UTF-8">
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>StockPro</title>
+
+    <title>Quản Lý Kho Hàng</title>
 
     <style>
+
         *{
             margin:0;
             padding:0;
@@ -19,11 +24,12 @@
         }
 
         .container{
-            max-width:900px;
+            width:700px;
             margin:auto;
             background:white;
             padding:20px;
             border-radius:10px;
+            box-shadow:0 0 10px rgba(0,0,0,0.1);
         }
 
         h1{
@@ -32,205 +38,185 @@
             color:#333;
         }
 
-        .form{
+        .box{
             display:flex;
-            gap:10px;
-            margin-bottom:20px;
-            flex-wrap:wrap;
+            gap:20px;
         }
 
-        input, select, button{
-            padding:10px;
+        .menu{
+            width:40%;
         }
 
-        button{
+        .menu h3{
+            margin-bottom:10px;
+        }
+
+        .menu ul{
+            list-style:none;
+        }
+
+        .menu li{
             background:#007bff;
             color:white;
-            border:none;
+            padding:12px;
+            margin-bottom:10px;
+            border-radius:5px;
             cursor:pointer;
         }
 
-        button:hover{
+        .menu li:hover{
             background:#0056b3;
         }
 
-        table{
-            width:100%;
-            border-collapse:collapse;
-            margin-top:20px;
+        .info{
+            width:60%;
+            background:#f0f8ff;
+            padding:20px;
+            border-radius:10px;
         }
 
-        table, th, td{
-            border:1px solid #ccc;
+        .info h3{
+            margin-bottom:15px;
         }
 
-        th, td{
-            padding:10px;
-            text-align:center;
+        .info p{
+            margin-bottom:10px;
+            font-size:18px;
         }
 
-        .low-stock{
-            color:red;
-            font-weight:bold;
-        }
     </style>
+
 </head>
+
 <body>
 
     <div class="container">
 
-        <h1>StockPro - Quản Lý Kho</h1>
+        <h1>Quản Lý Kho Hàng</h1>
 
-        <div class="form">
-            <input type="text" id="product" placeholder="Tên sản phẩm">
+        <div class="box">
 
-            <input type="number" id="quantity" placeholder="Số lượng">
+            <div class="menu">
 
-            <select id="type">
-                <option value="import">Nhập kho</option>
-                <option value="export">Xuất kho</option>
-            </select>
+                <h3>Thư mục sản phẩm</h3>
 
-            <button onclick="addTransaction()">
-                Thêm
-            </button>
+                <ul>
+
+                    <li onclick="showInfo('Bút')">
+                        Bút
+                    </li>
+
+                    <li onclick="showInfo('Thước kẻ')">
+                        Thước kẻ
+                    </li>
+
+                    <li onclick="showInfo('Giấy')">
+                        Giấy
+                    </li>
+
+                    <li onclick="showInfo('Compa')">
+                        Compa
+                    </li>
+
+                    <li onclick="showInfo('Tẩy')">
+                        Tẩy
+                    </li>
+
+                    <li onclick="showInfo('Máy tính')">
+                        Máy tính
+                    </li>
+
+                </ul>
+
+            </div>
+
+            <div class="info" id="productInfo">
+
+                <h3>Thông tin sản phẩm</h3>
+
+                <p>Chọn sản phẩm để xem thông tin</p>
+
+            </div>
+
         </div>
-
-        <table>
-            <thead>
-                <tr>
-                    <th>Sản phẩm</th>
-                    <th>Tồn kho</th>
-                    <th>Trạng thái</th>
-                </tr>
-            </thead>
-
-            <tbody id="inventoryTable">
-
-            </tbody>
-        </table>
 
     </div>
 
     <script>
 
-let transactions = [
+        const products = {
 
-    {
-        product: "Giấy",
-        quantity: 100,
-        type: "import"
-    },
+            "Bút": {
+                quantity: 120,
+                importDate: "12/05/2026",
+                price: "5.000 VNĐ"
+            },
 
-    {
-        product: "Giấy",
-        quantity: 20,
-        type: "export"
-    },
+            "Thước kẻ": {
+                quantity: 50,
+                importDate: "15/05/2026",
+                price: "10.000 VNĐ"
+            },
 
-    {
-        product: "Bút",
-        quantity: 50,
-        type: "import"
-    },
+            "Giấy": {
+                quantity: 300,
+                importDate: "10/05/2026",
+                price: "2.000 VNĐ"
+            },
 
-    {
-        product: "Bút",
-        quantity: 10,
-        type: "export"
-    },
+            "Compa": {
+                quantity: 25,
+                importDate: "08/05/2026",
+                price: "20.000 VNĐ"
+            },
 
-    {
-        product: "Tẩy",
-        quantity: 30,
-        type: "import"
-    },
+            "Tẩy": {
+                quantity: 70,
+                importDate: "18/05/2026",
+                price: "3.000 VNĐ"
+            },
 
-    {
-        product: "Tẩy",
-        quantity: 5,
-        type: "export"
-    },
-
-    {
-        product: "Thước kẻ",
-        quantity: 25,
-        type: "import"
-    },
-
-    {
-        product: "Thước kẻ",
-        quantity: 3,
-        type: "export"
-    }
-
-];
-        function addTransaction(){
-
-            const product = document.getElementById("product").value;
-            const quantity = Number(document.getElementById("quantity").value);
-            const type = document.getElementById("type").value;
-
-            if(product === "" || quantity <= 0){
-                alert("Vui lòng nhập dữ liệu hợp lệ");
-                return;
+            "Máy tính": {
+                quantity: 15,
+                importDate: "20/05/2026",
+                price: "150.000 VNĐ"
             }
 
-            transactions.push({
-                product,
-                quantity,
-                type
-            });
+        };
 
-            renderInventory();
+        function showInfo(product){
 
-            document.getElementById("product").value = "";
-            document.getElementById("quantity").value = "";
-        }
+            const info = products[product];
 
-        function renderInventory(){
+            document.getElementById("productInfo").innerHTML = `
 
-            const inventory = transactions.reduce((result, item) => {
+                <h3>Thông tin sản phẩm</h3>
 
-                if(!result[item.product]){
-                    result[item.product] = 0;
-                }
+                <p>
+                    <b>Tên sản phẩm:</b>
+                    ${product}
+                </p>
 
-                if(item.type === "import"){
-                    result[item.product] += item.quantity;
-                }else{
-                    result[item.product] -= item.quantity;
-                }
+                <p>
+                    <b>Số lượng:</b>
+                    ${info.quantity}
+                </p>
 
-                return result;
+                <p>
+                    <b>Ngày nhập:</b>
+                    ${info.importDate}
+                </p>
 
-            }, {});
+                <p>
+                    <b>Giá sản phẩm:</b>
+                    ${info.price}
+                </p>
 
-            const table = document.getElementById("inventoryTable");
-
-            table.innerHTML = "";
-
-            for(let product in inventory){
-
-                let status = "Còn hàng";
-
-                if(inventory[product] <= 5){
-                    status = "Sắp hết hàng";
-                }
-
-                table.innerHTML += `
-                    <tr>
-                        <td>${product}</td>
-                        <td>${inventory[product]}</td>
-                        <td class="${inventory[product] <= 5 ? 'low-stock' : ''}">
-                            ${status}
-                        </td>
-                    </tr>
-                `;
-            }
+            `;
         }
 
     </script>
 
 </body>
+
 </html>
